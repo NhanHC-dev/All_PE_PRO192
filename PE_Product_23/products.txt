@@ -1,0 +1,8 @@
+Id=4, Name=Software, UnitPrice=2.0, Quantity=2, Version=2, ProductManufacturingDate=01/01/2020
+Id=1, Name=Book, UnitPrice=1.0, Quantity=1, Version=1, ProductManufacturingDate=02/03/2019
+Id=2, Name=Mouse, UnitPrice=2.0, Quantity=2, Version=2, ProductManufacturingDate=15/07/2021
+Id=3, Name=Printer, UnitPrice=3.0, Quantity=3, Version=3, ProductManufacturingDate=16/04/2020
+Id=6, Name=CPU, UnitPrice=6.0, Quantity=100, Version=2.7, ProductManufacturingDate=10/05/2018
+Id=7, Name=Scanner, UnitPrice=7.0, Quantity=100, Version=3.2, ProductManufacturingDate=11/09/2020
+Id=10, Name=Keyboard, UnitPrice=10.0, Quantity=100, Version=2.5, ProductManufacturingDate=05/08/2022
+Id=8, Name=Ram, UnitPrice=8.0, Quantity=8, Version=3.1, ProductManufacturingDate=19/10/2021

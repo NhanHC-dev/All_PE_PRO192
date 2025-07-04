@@ -1,0 +1,6 @@
+001,Lipstick,Makeup,15/02/2020,19.99
+P002,Shampoo,Haircare,10/03/2023,12.50
+P003,Lipstick,Makeup,15/02/2021,10.59
+P004,Body Lotion,Bodycare,20/04/2023,18.75
+P005,Sunscreen,Skincare,30/05/2022,22.00
+P006,Conditioner,Haircare,25/06/2024,13.99
