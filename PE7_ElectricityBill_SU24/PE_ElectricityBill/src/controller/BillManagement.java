@@ -1,92 +1,111 @@
 package controller;
 
 import model.Bill;
-import model.ListBill;
+import model.BillList;
+import view.BillView;
 import view.Menu;
-import view.Validation;
 
 import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class BillManagement extends Menu<String> {
-    private static String[] options = {
+    BillList billList;
+    BillView view;
+
+    static String[] options = {
             "Display all bills",
-            "Add new bill",
+            "Display paid and unpaid bills",
+            "Display overdue bills",
+            "Add a new bill",
             "Delete a bill",
-            "Find largest amount bill",
-            "List of unpaid bills",
+            "Find bill with largest amount",
+            "Save to file",
             "Exit"
     };
 
-    private ListBill listBill;
-
     public BillManagement() {
-    }
-
-    public BillManagement(String title, String[] options, ListBill listBill) {
-        super(title, options);
-        this.listBill = listBill;
+        super("========= ELECTRICITY BILL MANAGEMENT =========", options);
+        billList = new BillList();
+        view = new BillView();
     }
 
     @Override
-    public void execute(int choice) {
-        switch (choice) {
-            case 1 -> listBill.listAllBills();
-            case 2 -> listBill.addNewBill();
-            case 3 -> deleteBill();
+    public void execute(int n) throws ParseException {
+        switch (n) {
+            case 1 -> view.displayList(billList, "All Bills");
+
+            case 2 -> {
+                    List<Bill> paid = billList.getPaidBills();
+                    List<Bill> unpaid = billList.getUnpaidBills();
+                    view.displayByPaidStatus(paid, unpaid);
+            }
+
+            case 3 -> {
+                List<Bill> overdue = billList.getOverdueBills();
+                view.displayList(overdue, "Overdue Bills");
+            }
+
             case 4 -> {
-                Bill largestBill = listBill.getLargestAmountBill();
-                System.out.println("Bill with the largest amount: " + largestBill);
-            }
-            case 5 -> {
-                ArrayList<Bill> unpaidBills = listBill.getUnpaidBills();
-                System.out.println("Unpaid Bills:");
-                for (Bill bill : unpaidBills) {
-                    System.out.println(bill);
+                Bill newBill = view.inputBill();
+                if (newBill != null) {
+                    billList.addBill(newBill);
+                    view.showMessage("Bill added successfully.");
                 }
-                //unpaidBills.forEach(System.out::println);
             }
-            case 6 -> this.stop();
+
+            case 5 -> deleteMenu();
+
+            case 6 -> {
+                Bill max = billList.getLargestAmountBill();
+                view.displaySingle(max, "Bill with Largest Amount");
+            }
+
+            case 7 -> {
+                billList.saveToFile();
+                view.showMessage("Bills saved to file successfully.");
+            }
+
+            case 8 -> {
+                view.showMessage("Exiting program...");
+                System.exit(0);
+            }
         }
     }
 
-    private void deleteBill() {
+    private void deleteMenu() throws ParseException {
         String[] deleteOptions = {
-                "Delete by Bill ID",
+                "Delete by ID",
                 "Delete by Customer Name",
                 "Delete by Due Date",
                 "Return"
         };
-
-        new Menu<String>("Delete Bill", deleteOptions) {
+        new Menu("Delete Bill", deleteOptions) {
             @Override
-            public void execute(int choice) {
-                switch (choice) {
+            public void execute(int n) throws ParseException {
+                switch (n) {
                     case 1 -> {
-                        int billID = Validation.getInt("Enter Bill ID: ", 1, Integer.MAX_VALUE);
-                        listBill.removeIf(bill -> bill.getId() == billID);
+                        int id = view.inputId();
+                        billList.deleteIf(b -> b.getId() == id);
+                        view.showMessage("Deleted bills with ID: " + id);
                     }
                     case 2 -> {
-                        String customerName = Validation.getString("Enter Customer Name: ");
-                        listBill.removeIf(bill -> bill.getCustomerName().equalsIgnoreCase(customerName));
+                        String name = view.inputCustomerName();
+                        billList.deleteIf(b -> b.getCustomerName().equalsIgnoreCase(name));
+                        view.showMessage("Deleted bills with name: " + name);
                     }
                     case 3 -> {
-                        String dateStr = Validation.getString("Enter Due Date (dd/MM/yyyy): ");
-                        try {
-                            Date dueDate = Validation.checkValidDate(dateStr);
-                            listBill.removeIf(bill -> bill.getDueDate().equals(dueDate));
-                        } catch (ParseException e) {
-                            System.out.println("Invalid date format. Please try again.");
-                        }
+                        Date d = view.inputDueDate();
+                        billList.deleteIf(b -> b.getDueDate().equals(d));
+                        view.showMessage("Deleted bills with due date: " + view.formatDate(d));
                     }
-                    default -> this.stop();
+                    case 4 -> this.stop();
                 }
             }
         }.run();
     }
 
-    public static void main(String[] args) {
-        new BillManagement("Electricity Bill Management", options, new ListBill()).run();
+    public static void main(String[] args) throws ParseException {
+        new BillManagement().run();
     }
 }

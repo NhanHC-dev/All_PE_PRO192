@@ -1,5 +1,6 @@
 package view;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 
 public abstract class Menu<T> {
@@ -42,13 +43,13 @@ public abstract class Menu<T> {
         return Validation.getInt("Enter selection: ", 1, this.options.size());
     }
 
-    public abstract void execute(int choice);
+    public abstract void execute(int choice) throws ParseException;
     
     protected void stop() {
         this.isStop = true;
     }
 
-    public void run() {
+    public void run() throws ParseException {
         while (!this.isStop) {
             int choice = getSelected();
 
