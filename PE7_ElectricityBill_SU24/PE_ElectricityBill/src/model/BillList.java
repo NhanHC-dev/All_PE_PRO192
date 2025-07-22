@@ -92,6 +92,4 @@ public class BillList extends ArrayList<Bill> {
     public Bill getLargestAmountBill() {
         return this.stream().max(Comparator.comparingDouble(Bill::getAmount)).orElse(null);
     }
-
-
 }

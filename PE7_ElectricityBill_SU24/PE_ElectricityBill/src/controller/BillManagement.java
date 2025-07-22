@@ -34,18 +34,8 @@ public class BillManagement extends Menu<String> {
     public void execute(int n) throws ParseException {
         switch (n) {
             case 1 -> view.displayList(billList, "All Bills");
-
-            case 2 -> {
-                    List<Bill> paid = billList.getPaidBills();
-                    List<Bill> unpaid = billList.getUnpaidBills();
-                    view.displayByPaidStatus(paid, unpaid);
-            }
-
-            case 3 -> {
-                List<Bill> overdue = billList.getOverdueBills();
-                view.displayList(overdue, "Overdue Bills");
-            }
-
+            case 2 -> view.displayByPaidStatus(billList.getPaidBills(), billList.getUnpaidBills());
+            case 3 -> view.displayList(billList.getOverdueBills(), "Overdue Bills");
             case 4 -> {
                 Bill newBill = view.inputBill();
                 if (newBill != null) {
@@ -53,19 +43,12 @@ public class BillManagement extends Menu<String> {
                     view.showMessage("Bill added successfully.");
                 }
             }
-
             case 5 -> deleteMenu();
-
-            case 6 -> {
-                Bill max = billList.getLargestAmountBill();
-                view.displaySingle(max, "Bill with Largest Amount");
-            }
-
-            case 7 -> {
+            case 6 -> view.displaySingle(billList.getLargestAmountBill(), "Bill with Largest Amount");
+            case 7 ->{
                 billList.saveToFile();
                 view.showMessage("Bills saved to file successfully.");
             }
-
             case 8 -> {
                 view.showMessage("Exiting program...");
                 System.exit(0);

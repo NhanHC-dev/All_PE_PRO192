@@ -25,6 +25,7 @@ public class ComicBookManagement extends ComicListView<String> {
                 "Update Comic Book",
                 "Display sorted comic books by the number of pages",
                 "Delete comic books",
+                "Display comic books by country",
                 "Export to new txt file",
                 "Exit",
         });
@@ -40,8 +41,9 @@ public class ComicBookManagement extends ComicListView<String> {
             case 4 -> update();
             case 5 -> displaySortedByPages();
             case 6 -> delete();
-            case 7 -> export();
-            case 8 -> {
+            case 7 -> comicBooks.groupByCountryOrigin();
+            case 8 -> export();
+            case 9 -> {
                 this.stop();
                 System.out.println("Exiting Comic Book Management System...");
             }
@@ -106,6 +108,7 @@ public class ComicBookManagement extends ComicListView<String> {
         comicBooks.deleteOldComicBooks();
         System.out.println("Comic books older than 10 years have been deleted.");
     }
+
 
     private void export() {
         String filename = Validation.getString("Enter the filename to export to: ");

@@ -4,9 +4,8 @@ import view.Validation;
 
 import java.io.*;
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Date;
+import java.text.SimpleDateFormat;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -30,7 +29,7 @@ public class ComicBookList extends ArrayList<ComicBook> {
                     try {
                         date = Validation.checkValidDate(parts[2].trim());
                     } catch (ParseException e) {
-                        System.out.println("Invalid date format for: " + parts[2].trim() + ". Skipping this entry.");
+                        System.err.println("Invalid date format for: " + parts[2].trim() + ". Skipping this entry.");
                         continue;
                     }
                     ComicBook comicBook = new ComicBook(
@@ -111,5 +110,29 @@ public class ComicBookList extends ArrayList<ComicBook> {
         } catch (IOException e) {
             Logger.getLogger(ComicBookList.class.getName()).log(Level.SEVERE, "Error writing to file: ", e);
         }
+    }
+    public void groupByCountryOrigin() {
+        if (this.isEmpty()) {
+            System.out.println("No comic books available.");
+            return;
+        }
+
+        Map<String, List<ComicBook>> grouped = this.stream()
+                .collect(Collectors.groupingBy(ComicBook::getCountryOrigin));
+
+        System.out.println("\nGrouped Comic Books by Country Origin:");
+        grouped.forEach((country, books) -> {
+            System.out.println("Country: " + country);
+            for (ComicBook b : books) {
+                System.out.printf(" - %s | %s | %s | Vol: %d | Pages: %d\n",
+                        b.getTitle(), b.getAuthor(),
+                        b.getReleaseDate() != null
+                                ? new SimpleDateFormat("dd/MM/yyyy").format(b.getReleaseDate())
+                                : "[Invalid date]",
+                        b.getVolume(), b.getPages()
+                );
+            }
+            System.out.println();
+        });
     }
 }
